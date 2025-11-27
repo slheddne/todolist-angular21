@@ -1,0 +1,5 @@
+@BASE_URL=http://localhost:44444
+
+GET {{BASE_URL}}/todo
+User-Agent: rest-client
+Content-Type: application/json

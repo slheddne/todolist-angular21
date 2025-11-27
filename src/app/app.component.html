@@ -1,0 +1,20 @@
+<header class="text-bg-dark py-1">
+  <section class="container">
+    <h1>
+      Mes trucs à faire <span class="badge text-bg-light">{{ total() }}</span>
+    </h1>
+    <app-todo-progress></app-todo-progress>
+  </section>
+</header>
+
+<main class="container">
+  <app-todo-create></app-todo-create>
+  <app-todolist></app-todolist>
+  <app-todo-progress></app-todo-progress>
+</main>
+
+<footer class="text-bg-dark py-1">
+  <section class="container text-center">
+    <span class="badge text-bg-light"> Powered by <i class="fab fa-angular"></i> </span>
+  </section>
+</footer>

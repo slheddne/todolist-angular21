@@ -1,0 +1,17 @@
+<div class="progress-stacked my-1">
+  <div class="progress" [style.width]= "rate().closed | percent: '.0-8'">
+    <div class="progress-bar" [ngClass]="'bg-' + ('closed' | todostatus : 'bootstrap')">
+      {{ rate().closed | percent: '.0-2' }}
+    </div>
+  </div>
+  <div class="progress" [style.width]= "rate().closed | percent: '.0-8'">
+    <div class="progress-bar" [ngClass]="'bg-' + ('in-progress' | todostatus : 'bootstrap')">
+      {{ rate().inProgress | percent: '.0-2' }}
+    </div>
+  </div>
+  <div class="progress" [style.width]= "rate().closed | percent: '.0-8'">
+    <div class="progress-bar" [ngClass]="'bg-' + ('late' | todostatus : 'bootstrap')">
+      {{ rate().late | percent: '.0-2' }}
+    </div>
+  </div>
+</div>

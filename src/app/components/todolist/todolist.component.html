@@ -1,0 +1,56 @@
+<section class="row my-2">
+  <div class="col-3">
+    <section class="btn-group">
+      <button
+        (click)="sortBy('title')"
+        [class.active]="this.currentSort() == 'title'"
+        class="btn btn-outline-dark"
+        title="Trier par ordre alphabétique"
+      >
+        <i class="fa fa-sort-alpha-asc"></i>
+      </button>
+      <button
+        (click)="sortBy('dueDate')"
+        class="btn btn-outline-dark"
+        [class.active]="this.currentSort() == 'dueDate'"
+        title="Trier par date d'échéance"
+      >
+        <i class="fa fa-sort-numeric-desc"></i>
+      </button>
+    </section>
+  </div>
+
+  <div class="col">
+    <div class="input-group">
+      <input
+        #inputFilter
+        (keydown.enter)="filterBy(inputFilter.value)"
+        [value]="currentFilter()"
+        type="text"
+        class="form-control border-dark"
+      />
+      <button (click)="filterBy(inputFilter.value)" class="btn btn-outline-dark">
+        <i class="fa fa-magnifying-glass"></i>
+      </button>
+    </div>
+    @if (isFiltered()) {
+      <span class="badge text-bg-dark" (click)="filterBy('')">
+        {{ countFiltered() }} résultat(s) pour '{{ currentFilter() }}'
+        <i class="far fa-times-circle"></i>
+      </span>
+    }
+  </div>
+</section>
+
+<section></section>
+
+<section>
+  @for (todo of allTodos(); track todo.id) {
+    <app-todolist-item
+      [todoItem]="todo"
+      (toggling)="toggleIt($event)"
+      (deleting)="deleteIt($event)">
+    </app-todolist-item>
+  }
+</section>
+

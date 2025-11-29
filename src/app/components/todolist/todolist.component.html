@@ -16,6 +16,16 @@
         title="Trier par date d'échéance"
       >
         <i class="fa fa-sort-numeric-desc"></i>
+
+      </button>
+      <button
+        (click)="sortBy('done')"
+        class="btn btn-outline-dark"
+        [class.active]="this.currentSort() == 'done'"
+        title="Trier par statut d'achèvement"
+      >
+        <i class="fa-solid fa-circle-check"></i>
+
       </button>
     </section>
   </div>

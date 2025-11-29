@@ -30,6 +30,9 @@ export class TodolistComponent {
       case 'dueDate':
         todos.sort((t1, t2) => t2.dueDate.getTime() - t1.dueDate.getTime());
         break;
+      case 'done':
+        todos.sort((t1, t2) => +t2.done - +t1.done);
+        break;
     }
 
     return todos;
@@ -59,4 +62,4 @@ export class TodolistComponent {
   protected deleteIt(todo: Todo) { this.todoService.delete(todo); }
 }
 
-export type SortKey = 'title' | 'dueDate';
+export type SortKey = 'title' | 'dueDate' | 'done';

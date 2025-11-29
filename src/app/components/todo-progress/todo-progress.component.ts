@@ -11,13 +11,22 @@ import { TodoService } from '../../services/todo.service';
 })
 export class TodoProgressComponent {
   private readonly todoService = inject(TodoService);
-  protected readonly rate = computed(() => {
+  protected readonly stats = computed(() => {
     const todos = this.todoService.todos();
-    return {
-      closed: todos.filter((t) => t.status === 'closed').length / todos.length,
-      inProgress: todos.filter((t) => t.status === 'in-progress').length / todos.length,
-      late: todos.filter((t) => t.status === 'late').length / todos.length,
-    }
-  })
+    const total = todos.length;
 
+    const closed = todos.filter((t) => t.status === 'closed').length;
+    const inProgress = todos.filter((t) => t.status === 'in-progress').length;
+    const late = todos.filter((t) => t.status === 'late').length;
+
+    return {
+      total,
+      counts: { closed, inProgress, late },
+      rates: {
+        closed: closed / total || 0,
+        inProgress: inProgress / total || 0,
+        late: late / total || 0,
+      },
+    };
+  });
 }

@@ -1,0 +1,77 @@
+<!-- Modal -->
+<div class="modal fade" id="updateform" tabindex="-1">
+  <form (ngSubmit)="saveUpdatedTodo()">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Modifier la tâche</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input [formControl]="fieldTitle" type="text" class="form-control" placeholder="libellé" />
+            <label>Libellé</label>
+            @if (fieldTitle.invalid && fieldTitle.touched) {
+              <span class="text-danger fst-italic">
+                Le libellé est
+                @if (fieldTitle.hasError('required')) { <span class="text-danger">obligatoire.</span> }
+                @if (fieldTitle.hasError('minlength')) { <span class="text-danger">trop court ({{ fieldTitle.getError('minlength').requiredLength }} caractères minimum).</span> }
+              </span>
+            }
+          </div>
+          <div class="form-floating mb-3">
+            <input [formControl]="fieldDueDate" type="date" class="form-control" placeholder="échéance" />
+            <label>Echéance</label>
+            @if (fieldDueDate.invalid && fieldDueDate.touched) {
+              <span class="text-danger fst-italic">
+                La date d'échéance
+                @if (fieldDueDate.hasError('required')) { <span class="text-danger">est obligatoire.</span> }
+                @if (fieldDueDate.hasError('minDate')) { <span class="text-danger">doit être après le {{ fieldDueDate.getError('minDate').requiredDate | date: 'dd/MM/yyyy' }}.</span> }
+              </span>
+            }
+          </div>
+          <div class="form-floating mb-3">
+            <input [formControl]="fieldLatitude" type="number" class="form-control" placeholder="latitude" />
+            <label>Latitude</label>
+            @if (fieldLatitude.invalid && fieldLatitude.touched) {
+              <span class="text-danger fst-italic">
+                @if (fieldLatitude.hasError('required')) { Obligatoire avec la longitude. }
+                @if (fieldLatitude.hasError('min')) { La latitude doit être supérieure ou égale à {{ fieldLatitude.getError('min').min }}. }
+                @if (fieldLatitude.hasError('max')) { La latitude doit être inférieure ou égale à {{ fieldLatitude.getError('max').max }}. }
+              </span>
+            }
+          </div>
+          <div class="form-floating">
+            <input [formControl]="fieldLongitude" type="number" class="form-control" placeholder="longitude" />
+            <label>Longitude</label>
+            @if (fieldLongitude.invalid && fieldLongitude.touched) {
+              <span class="text-danger fst-italic">
+                @if (fieldLongitude.hasError('required')) { Obligatoire avec la latitude. }
+                @if (fieldLongitude.hasError('min')) { La longitude doit être supérieure ou égale à {{ fieldLongitude.getError('min').min }}. }
+                @if (fieldLongitude.hasError('max')) { La longitude doit être inférieure ou égale à {{ fieldLongitude.getError('max').max }}. }
+              </span>
+            }
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button #btnClose
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Fermer
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa fa-save"></i>
+            Enregistrer
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

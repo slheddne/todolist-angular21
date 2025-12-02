@@ -67,10 +67,6 @@ export class TodolistComponent {
   protected editIt(todo: Todo) {
     this.editingTodo.set(todo);
   }
-
-  protected onEditSaved() {
-    // Le modal se fermera automatiquement
-  }
 }
 
 export type SortKey = 'title' | 'dueDate' | 'done';

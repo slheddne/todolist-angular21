@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, inject, input, output, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, viewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InfotelValidators } from '../../utils/infotel-validators';
 import { DatePipe } from '@angular/common';
@@ -15,7 +15,6 @@ export class TodoUpdateComponent {
   private readonly todoService = inject(TodoService);
 
   todoToEdit = input<Todo | undefined>(undefined);
-  onSaved = output<void>();
 
   fieldTitle!: FormControl;
   fieldDueDate!: FormControl;
@@ -26,7 +25,7 @@ export class TodoUpdateComponent {
   private initFields(todo?: Todo) {
     const today = new Date().toISOString().split('T')[0];
     let dueDateStr = today;
-    
+
     if (todo) {
       const date = todo.dueDate;
       const year = date.getFullYear();
@@ -85,7 +84,6 @@ export class TodoUpdateComponent {
 
       this.todoService.update(todoToUpdate);
       this.buttonClose()?.nativeElement.click();
-      this.onSaved.emit();
     }
   }
 }

@@ -26,3 +26,13 @@ export class TodoCreate {
     public readonly longitude: number | null
   ) { }
 }
+
+export class TodoUpdate {
+  constructor(
+    public readonly id: number,
+    public readonly title: string,
+    public readonly dueDate: Date,
+    public readonly latitude: number | null,
+    public readonly longitude: number | null
+  ) { }
+}

@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Todo, TodoLocation, TodoStatus, TodoCreate } from '../models/todo.model';
-import { TodoDto, TodoPatchDto, TodoPostDto } from '../models/todo.dto';
+import { Todo, TodoLocation, TodoStatus, TodoCreate, TodoUpdate } from '../models/todo.model';
+import { TodoDto, TodoPatchDto, TodoPostDto, TodoPutDto } from '../models/todo.dto';
 import { map } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
@@ -119,6 +119,27 @@ export class TodoService {
       .subscribe({
         next: createdTodo => this.todosState.update(todos => [...todos, createdTodo]),
         error: httpError => this._lastError.set('😔 Impossible de créer la tâche : ' + this.mapHttpErrorToMessage(httpError))
+      });
+  }
+
+  update(todoToUpdate: TodoUpdate) {
+    this._lastError.set('');
+
+    let body: TodoPutDto = {
+      title: todoToUpdate.title,
+      dueDate: todoToUpdate.dueDate.toISOString(),
+      latitude: todoToUpdate.latitude,
+      longitude: todoToUpdate.longitude
+    };
+
+    this.http
+      .put<TodoDto>(`${this.baseUrl}/todo/${todoToUpdate.id}`, body)
+      .pipe(
+        map((dto) => this.mapDtoToModel(dto))
+      )
+      .subscribe({
+        next: updatedTodo => this.todosState.update(todos => todos.map(t => t.id === updatedTodo.id ? updatedTodo : t)),
+        error: httpError => this._lastError.set('😔 Impossible de mettre à jour la tâche : ' + this.mapHttpErrorToMessage(httpError))
       });
   }
 }

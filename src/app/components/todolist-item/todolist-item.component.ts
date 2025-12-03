@@ -22,4 +22,5 @@ export class TodolistItemComponent {
   todoItem = input.required<Todo>();
   toggling = output<Todo>();
   deleting = output<Todo>();
+  updating = output<Todo>();
 }

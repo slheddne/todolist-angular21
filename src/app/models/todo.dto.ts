@@ -21,6 +21,7 @@ export interface TodoPostDto {
 export interface TodoPutDto {
   title: string;
   dueDate: string;
+  isDone: boolean;
   latitude: null | number;
   longitude: null | number;
 }

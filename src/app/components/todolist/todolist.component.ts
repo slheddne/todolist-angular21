@@ -2,10 +2,11 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
 import { TodolistItemComponent } from "../todolist-item/todolist-item.component";
 import { Todo } from '../../models/todo.model';
+import { TodoUpdateComponent } from "../todo-update/todo-update.component";
 
 @Component({
   selector: 'app-todolist',
-  imports: [TodolistItemComponent],
+  imports: [TodolistItemComponent, TodoUpdateComponent],
   templateUrl: './todolist.component.html',
   styleUrl: './todolist.component.css',
 })
@@ -60,6 +61,10 @@ export class TodolistComponent {
   protected toggleIt(todo: Todo) { this.todoService.toggle(todo); }
 
   protected deleteIt(todo: Todo) { this.todoService.delete(todo); }
+
+  protected readonly selectedTodo = signal<Todo | undefined>(undefined);
+
+  protected updateIt(todo: Todo) { this.selectedTodo.set(todo); }
 }
 
 export type SortKey = 'title' | 'dueDate' | 'done';

@@ -4,17 +4,13 @@
   <div class="card-body">
     <section class="d-flex align-items-center">
       <button (click)="toggling.emit(todo)" class="border-0 bg-transparent">
-        <i
-          class="fa-2x"
-          [ngClass]="[todo.done ? 'fa fa-check-circle' : 'far fa-circle']"
-
-        ></i>
+        <i class="fa-2x" [ngClass]="[todo.done ? 'fa fa-check-circle' : 'far fa-circle']"></i>
       </button>
       <div>
         <h4 class="card-title">{{ todo.title }}</h4>
         <h6 class="card-subtitle text-muted">
           <i class="fa fa-calendar-day"></i>
-          {{ todo.dueDate | date: 'dd/MM/yyyy' }}
+          {{ todo.dueDate | date : 'dd/MM/yyyy' }}
         </h6>
       </div>
     </section>
@@ -22,28 +18,28 @@
   <div class="card-footer">
     <section class="d-flex justify-content-between align-items-center">
       <div>
-        <span class="badge"
-        [ngClass]="'text-bg-' + (todo.status | todostatus : 'bootstrap')"
-        >
+        <span class="badge" [ngClass]="'text-bg-' + (todo.status | todostatus : 'bootstrap')">
           {{ todo.status | todostatus | uppercase }}
         </span>
       </div>
       <div class="btn-group">
-        <button class="btn btn-outline-dark"><i class="fa fa-edit"></i></button>
-        <button class="btn btn-outline-dark">
-          <i class="fa fa-share-alt"></i>
+        <button
+          class="btn btn-outline-dark"
+          (click)="updating.emit(todo)"
+          data-bs-toggle="modal"
+          data-bs-target="#updateform"
+        >
+          <i class="fa fa-edit"></i>
         </button>
         <button
           [disabled]="!todo.location"
           [title]="todo.location ? (todo.location | todolocation) : ''"
           [appOpenTab]="todo.location ? (todo.location | todolocation : 'google-maps') : ''"
-          class="btn btn-outline-dark">
+          class="btn btn-outline-dark"
+        >
           <i class="fa fa-map-marked"></i>
         </button>
-        <button
-          class="btn btn-outline-dark"
-          (click)="deleting.emit(todo)"
-        >
+        <button [disabled]="!(todo.id % 3)" class="btn btn-outline-dark" (click)="deleting.emit(todo)">
           <i
             class="fa text-danger"
             [class.fa-trash]="todo.id % 3"
@@ -54,5 +50,3 @@
     </section>
   </div>
 </div>
-
-

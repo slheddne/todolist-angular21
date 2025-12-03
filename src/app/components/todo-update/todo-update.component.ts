@@ -1,0 +1,93 @@
+import { Component, effect, ElementRef, inject, input, viewChild } from '@angular/core';
+import { Todo, TodoUpdate } from '../../models/todo.model';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TodoService } from '../../services/todo.service';
+import { InfotelValidators } from '../../utils/infotel-validators';
+import { DatePipe } from '@angular/common';
+
+@Component({
+  selector: 'app-todo-update',
+  imports: [FormsModule, ReactiveFormsModule, DatePipe],
+  templateUrl: './todo-update.component.html',
+  styleUrl: './todo-update.component.css',
+})
+export class TodoUpdateComponent {
+  private readonly todoService = inject(TodoService);
+
+  todoToEdit = input<Todo | undefined>();
+
+  fieldTitle!: FormControl;
+  fieldDueDate!: FormControl;
+  fieldIsDone!: FormControl;
+  fieldLatitude!: FormControl;
+  fieldLongitude!: FormControl;
+  groupUpdate!: FormGroup;
+
+  private initFields(todo?: Todo) {
+    const today = new Date().toISOString().split('T')[0];
+    let dueDateStr = today;
+
+    if (todo) {
+      const date = todo.dueDate;
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      dueDateStr = `${year}-${month}-${day}`;
+    }
+
+    this.fieldTitle = new FormControl(todo?.title ?? '', [Validators.required, Validators.minLength(3)]);
+    this.fieldDueDate = new FormControl(dueDateStr, [Validators.required, InfotelValidators.minDate(new Date())]);
+    this.fieldIsDone = new FormControl(todo?.done ?? false);
+    this.fieldLatitude = new FormControl(todo?.location?.latitude ?? null, [Validators.min(-90), Validators.max(90)]);
+    this.fieldLongitude = new FormControl(todo?.location?.longitude ?? null, [Validators.min(-180), Validators.max(180)]);
+
+    this.fieldLatitude.addValidators(InfotelValidators.requiredWith(this.fieldLongitude));
+    this.fieldLongitude.addValidators(InfotelValidators.requiredWith(this.fieldLatitude));
+
+    this.fieldLatitude.valueChanges.subscribe(v => this.fieldLongitude.updateValueAndValidity({ emitEvent: false }));
+    this.fieldLongitude.valueChanges.subscribe(v => this.fieldLatitude.updateValueAndValidity({ emitEvent: false }));
+
+    this.groupUpdate = new FormGroup({
+      title: this.fieldTitle,
+      dueDate: this.fieldDueDate,
+      isDone: this.fieldIsDone,
+      latitude: this.fieldLatitude,
+      longitude: this.fieldLongitude
+    });
+  }
+
+  constructor() {
+    this.initFields();
+
+    effect(() => {
+      const todo = this.todoToEdit();
+      if (todo) {
+        this.initFields(todo);
+      }
+    });
+  }
+
+  buttonClose = viewChild<ElementRef<HTMLButtonElement>>('btnClose');
+  saveUpdateTodo() {
+
+    const todo = this.todoToEdit();
+    if (!todo) return;
+
+    this.groupUpdate.markAllAsTouched();
+
+    if (this.groupUpdate.valid) {
+      const todoToUpdate = new TodoUpdate(
+        todo.id,
+        this.fieldTitle.value,
+        new Date(this.fieldDueDate.value),
+        this.fieldIsDone.value,
+        this.fieldLatitude.value,
+        this.fieldLongitude.value
+      );
+
+      this.todoService.update(todoToUpdate);
+      this.initFields();
+      this.buttonClose()?.nativeElement.click();
+    }
+  }
+}

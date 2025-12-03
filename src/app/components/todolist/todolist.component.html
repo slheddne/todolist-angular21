@@ -59,8 +59,11 @@
     <app-todolist-item
       [todoItem]="todo"
       (toggling)="toggleIt($event)"
-      (deleting)="deleteIt($event)">
+      (deleting)="deleteIt($event)"
+      (updating)="updateIt($event)">
     </app-todolist-item>
   }
 </section>
+
+<app-todo-update [todoToEdit]="selectedTodo()"> </app-todo-update>
 

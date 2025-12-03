@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Todo, TodoLocation, TodoStatus, TodoCreate, TodoUpdate } from '../models/todo.model';
+import { Todo, TodoLocation, TodoStatus, TodoCreate } from '../models/todo.model';
 import { TodoDto, TodoPatchDto, TodoPostDto, TodoPutDto } from '../models/todo.dto';
 import { map } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
@@ -122,14 +122,14 @@ export class TodoService {
       });
   }
 
-  update(todoToUpdate: TodoUpdate) {
+  update(todoToUpdate: Todo) {
     this._lastError.set('');
 
     let body: TodoPutDto = {
       title: todoToUpdate.title,
       dueDate: todoToUpdate.dueDate.toISOString(),
-      latitude: todoToUpdate.latitude,
-      longitude: todoToUpdate.longitude
+      latitude: todoToUpdate.location?.latitude ?? null,
+      longitude: todoToUpdate.location?.longitude ?? null
     };
 
     this.http
